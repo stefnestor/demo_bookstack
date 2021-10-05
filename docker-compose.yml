@@ -1,0 +1,28 @@
+version: '2'
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:5.7.33
+    environment:
+    - MYSQL_ROOT_PASSWORD=secret
+    - MYSQL_DATABASE=bookstack
+    - MYSQL_USER=bookstack
+    - MYSQL_PASSWORD=secret
+    volumes: ["./db:/var/lib/mysql"]
+    ports: ["3306:3306"]
+
+  bookstack:
+    container_name: bookstack
+    image: solidnerd/bookstack:latest
+    depends_on: ["mysql"]
+    environment:
+    - DB_HOST=mysql:3306
+    - DB_DATABASE=bookstack
+    - DB_USERNAME=bookstack
+    - DB_PASSWORD=secret
+    - APP_ENV=dev
+    volumes: ["./u:/var/www/bookstack/public/uploads", "./su:/var/www/bookstack/storage/uploads"]
+    ports: ["8080:8080"]
+
+# u: admin@admin.com
+# p: password
